@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.huarui.hr.lp.mapper.SysRightMapper">
+  	<select id="query" resultType="SysRight">
+  		select * from sys_right
+  	</select>
+  	<select id="queryById" resultType="SysRight">
+  		select * from sys_right where right_parent_code = #{id}
+  	</select>
+  	<select id="queryRightAndRoleByRoleId" resultType="SysRight">
+  		select * from sys_right where right_code in(select right_code from sys_right_role where role_id=#{roleid}	)
+  	</select>
+  </mapper>

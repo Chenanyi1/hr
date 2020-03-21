@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.huarui.hr.lp.mapper.UserMapper">
+  <resultMap type="SysUser" id="myUser">
+  <id column="u_id" property="u_id"></id>
+  <result column="u_name" property="u_name"/>
+  <result column="u_true_name" property="u_true_name"/>
+  <result column="u_password" property="u_password"/>
+  </resultMap>
+  <resultMap type="SysUser" id="userRoleRight"  extends="myUser">
+  	<association column="u_roleid" property="role" select="com.huarui.hr.lp.mapper.SysRoleMapper.queryRoleById"></association>
+  </resultMap>
+  <resultMap type="SysUser" id="userRole"  extends="myUser">
+  	<association column="u_roleid" property="role" select="com.huarui.hr.lp.mapper.SysRoleMapper.queryRoleById2"></association>
+  </resultMap>
+  	<select id="queryUserByNameAndPwd" resultMap="userRoleRight">
+  		select * from users where u_name = #{u_name} and u_password = #{u_password}
+  	</select>
+  	
+  	<select id="queryUser" resultMap="userRole">
+  	<bind name="pg" value="(page-1)*rows"/>
+  		select * from users order by ${sort} ${order}  limit #{pg},#{rows}
+  	</select>
+  	
+  	<insert id="insertUser" >
+  		insert into users(u_name,u_true_name,u_password,u_roleid) values(#{u_name},#{u_true_name},#{u_password},#{role.role_id})
+  	</insert>
+  </mapper>
